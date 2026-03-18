@@ -146,17 +146,7 @@ Option B - Direct install via command:
 
 ### For Cursor (Open Plugins)
 
-This repository is listed on the [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering). Install directly:
-
-```
-cursor-cli plugin install muratcankoylan/Agent-Skills-for-Context-Engineering
-```
-
-Or load locally during development:
-
-```
-cursor --plugin-dir ./Agent-Skills-for-Context-Engineering
-```
+This repository is listed on the [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering).
 
 The `.plugin/plugin.json` manifest follows the [Open Plugins](https://open-plugins.com) standard, so the repo also works with any conformant agent tool (Codex, GitHub Copilot, etc.).
 
