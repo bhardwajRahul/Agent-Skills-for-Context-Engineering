@@ -6,12 +6,12 @@
   },
   "metadata": {
     "description": "Context Engineering skills for building production-grade AI agent systems",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "plugins": [
     {
       "name": "context-engineering",
-      "description": "Comprehensive context engineering skills for building production-grade AI agent systems — covering fundamentals, degradation patterns, compression, optimization, multi-agent coordination, memory systems, tool design, filesystem context, hosted agents, evaluation, project development, and cognitive architecture",
+      "description": "Comprehensive context engineering skills for building production-grade AI agent systems — covering fundamentals, degradation patterns, compression, optimization, latent briefing (KV sharing between agents), multi-agent coordination, memory systems, tool design, filesystem context, hosted agents, evaluation, advanced evaluation, project development, and cognitive architecture",
       "source": "./",
       "strict": false,
       "skills": [
@@ -27,7 +27,8 @@
         "./skills/evaluation",
         "./skills/advanced-evaluation",
         "./skills/project-development",
-        "./skills/bdi-mental-states"
+        "./skills/bdi-mental-states",
+        "./skills/latent-briefing"
       ]
     }
   ]

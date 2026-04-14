@@ -49,6 +49,7 @@ These skills address the ongoing operation and optimization of agent systems.
 | Skill | Description |
 |-------|-------------|
 | [context-optimization](skills/context-optimization/) | Apply compaction, masking, and caching strategies |
+| [latent-briefing](skills/latent-briefing/) | Share task-relevant orchestrator state with workers via task-guided KV cache compaction when the worker runtime is controllable |
 | [evaluation](skills/evaluation/) | Build evaluation frameworks for agent systems |
 | [advanced-evaluation](skills/advanced-evaluation/) | Master LLM-as-a-Judge techniques: direct scoring, pairwise comparison, rubric generation, and bias mitigation |
 
@@ -112,7 +113,7 @@ Option B - Direct install via command:
 /plugin install context-engineering@context-engineering-marketplace
 ```
 
-This installs all 13 skills in a single plugin. Skills are activated automatically based on your task context.
+This installs all 14 skills in a single plugin. Skills are activated automatically based on your task context.
 
 ### Skill Triggers
 
@@ -122,6 +123,7 @@ This installs all 13 skills in a single plugin. Skills are activated automatical
 | `context-degradation` | "diagnose context problems", "fix lost-in-middle", "debug agent failures" |
 | `context-compression` | "compress context", "summarize conversation", "reduce token usage" |
 | `context-optimization` | "optimize context", "reduce token costs", "implement KV-cache" |
+| `latent-briefing` | "KV cache compaction between agents", "worker KV memory handoff", "latent briefing", "share trajectory without summarization" |
 | `multi-agent-patterns` | "design multi-agent system", "implement supervisor pattern" |
 | `memory-systems` | "implement agent memory", "build knowledge graph", "track entities" |
 | `tool-design` | "design agent tools", "reduce tool complexity", "implement MCP tools" |
@@ -151,7 +153,7 @@ curl -o .claude/skills/context-fundamentals.md \
   https://raw.githubusercontent.com/muratcankoylan/Agent-Skills-for-Context-Engineering/main/skills/context-fundamentals/SKILL.md
 ```
 
-Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `project-development`, `bdi-mental-states`
+Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `project-development`, `bdi-mental-states`
 
 ### For Custom Implementations
 
