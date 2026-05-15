@@ -141,7 +141,23 @@ Three properties of the loop matter:
 
 Takeaway: for any system where description quality matters (skill routers, tool routers, RAG document selection), invest in a measurement loop early. The first run identifies the failures; the second run proves whether the fix worked. Without the second run, you do not actually know.
 
-### 15. Concurrency, resume, and per-run logging are the three non-negotiable runner features
+### 15. Description rewrites are incomplete without body alignment, and the router benchmark cannot catch that
+
+The first v2.3.0 description-rewrite pass changed the one-line frontmatter `description` for three skills. The router benchmark validated that change (top-1 rates improved as predicted). The mistake was assuming the work was done.
+
+The frontmatter description is what gets injected into a routing prompt. The SKILL.md body (`When to Activate`, `Practical Guidance`, `Examples`, `Integration`, `Gotchas`) is what gets loaded into the agent's context once the skill activates. These are two different surfaces with two different audiences. A description can route correctly while the body still steers the agent toward the wrong work.
+
+Concrete instance: after the description rewrite, `context-fundamentals` correctly routed to itself for foundational prompts, but its body still listed "Optimizing context usage to reduce token costs or improve performance" as a `When to Activate` trigger. The moment the skill activated for a real task, the agent saw operational ownership claims that contradicted the description that got it there. The router benchmark (which runs with `settingSources: []` and only sees descriptions) had no way to surface this gap.
+
+Three fixes:
+
+1. Treat "rewrite the description" and "align the body" as two work items, not one. The first is cheap and benchmark-measurable; the second is cheaper still but invisible to the router benchmark and only measurable in Stage 3 effectiveness tests where the body actually loads.
+2. The `When to Activate` body section is the highest-leverage body content. It is loaded immediately, parsed by the model, and acts as a second routing surface inside the skill. A `When to Activate` that contradicts the frontmatter `description` is worse than no `When to Activate` at all.
+3. The `Integration` section is the cross-reference layer. After every description rewrite, every sibling skill's `Integration` should be checked for stale routing claims. A skill that says "for X, go to old-skill-name" when X has been re-homed introduces real routing damage.
+
+Takeaway: any time a skill's scope is narrowed at the description level, audit the body the same day. A skill is a multi-surface artifact; consistency across surfaces is part of the change.
+
+### 16. Concurrency, resume, and per-run logging are the three non-negotiable runner features
 
 The v1 router runner ran sequentially, had no resume capability, and printed nothing per-run. The sweep died at 566 of 600 and we did not know:
 
@@ -179,6 +195,7 @@ Patterns from this experiment that are worth carrying into other agentic systems
 10. **Treat continuous operation as a separate milestone** from per-task correctness.
 11. **The description-benchmark loop** for any system where natural-language descriptions affect routing: baseline benchmark, read the confusion matrix, rewrite based on specific leak directions, re-run with the same seed and fixture, publish the delta.
 12. **Resume-by-results-folder-scan + bounded concurrency + per-run progress logging** as the three non-negotiable runner features for any paid-API loop.
+13. **Audit the body the same day the description changes.** A skill is a multi-surface artifact; the `When to Activate` body section is a second routing surface and must not contradict the frontmatter description. The router benchmark cannot catch body-vs-description inconsistencies because router prompts only contain descriptions.
 
 ## How To Use This Document
 

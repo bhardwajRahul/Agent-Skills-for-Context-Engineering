@@ -30,6 +30,16 @@ Targeted at the two routing failures the v2.2.0 baseline benchmark surfaced:
 - `project-development`: tightened with explicit cross-references to `tool-design`. Top-1 rate went from **0.750 to 1.000** (now perfect routing).
 - `tool-design`: tightened with explicit cross-references to `project-development`. Top-1 rate went from **0.729 to 0.807** (+7.8pp).
 
+#### Skill body alignment with new descriptions
+
+The router benchmark only sees frontmatter `description` because `settingSources: []` excludes the SKILL.md body. The first description rewrite pass left the bodies (`When to Activate`, `Practical Guidance`, `Integration`) claiming the broader pre-rewrite scope, which would have steered the agent toward operational work the moment the skill actually activated in production. Aligned the bodies in a follow-up pass:
+
+- `context-fundamentals` body: rewrote `When to Activate` to list conceptual triggers and explicit do-not-activate routing; removed the operational `File-System-Based Access` and `Context Budgeting` practical-guidance sections (owned by `filesystem-context` and `context-optimization` respectively); replaced with conceptual application advice plus a reading-order recommendation for new contributors; rewrote `Integration` as an explicit routing map across all 14 sibling skills. Internal version bump 2.0.0 -> 2.1.0.
+- `tool-design` body: rewrote `When to Activate` to anchor on the unit of work (single tool or tool catalog) and listed adjacent decisions owned by `project-development`, `multi-agent-patterns`, `context-optimization`; rewrote `Integration` with explicit routing reasons. Internal version bump 2.0.0 -> 2.1.0.
+- `project-development` body: rewrote `When to Activate` to anchor on project shape and pipeline; listed adjacent decisions owned by `tool-design`, `context-optimization`, `multi-agent-patterns`, `harness-engineering`; rewrote `Integration` with explicit routing reasons. Internal version bump 1.1.0 -> 1.2.0.
+
+The body changes do not affect router-benchmark numbers (the router sees only descriptions) but they do affect what the agent loads when these skills activate. Stage 3 (effectiveness benchmark, which loads full bodies) is the right place to measure the impact of this alignment.
+
 #### Six new boundary regression cases
 
 `researcher/fixtures/activation-cases.jsonl` grew from 8 to 14 cases. Each new case targets a specific confusion observed in the v2.2.0 baseline:
