@@ -138,22 +138,41 @@ This installs all 15 skills in a single plugin. Skills are activated automatical
 
 <img width="1014" height="894" alt="Screenshot 2025-12-26 at 12 34 47 PM" src="https://github.com/user-attachments/assets/f79aaf03-fd2d-4c71-a630-7027adeb9bfe" />
 
-### For Cursor (Open Plugins)
+### For Cursor, Codex, and Open Plugins
 
-This repository is listed on the [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering).
+This repository ships as an [Open Plugins](https://open-plugins.com) plugin. Hosts discover skills from the repo-root `skills/` directory (each subdirectory contains a `SKILL.md` file). The manifest lives at `.plugin/plugin.json`.
 
-The `.plugin/plugin.json` manifest follows the [Open Plugins](https://open-plugins.com) standard, so the repo also works with any conformant agent tool (Codex, GitHub Copilot, etc.).
+**Cursor (recommended):**
+
+1. Install from the [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering), or clone this repo and point Cursor at the plugin root.
+2. Cursor reads `.plugin/plugin.json` and discovers the repo-root `skills/` directory through the Open Plugins manifest.
+3. For project-local manual installs, copy skill directories into `.cursor/skills/`. Do not rely on repository symlinks; they are fragile on Windows and in plugin packaging.
+
+**Codex / GitHub Copilot CLI / other Open Plugins hosts:**
+
+1. Clone or add this repository as a plugin directory.
+2. The host reads `.plugin/plugin.json` and discovers all 15 skills under `skills/`.
+3. For project-local manual installs, copy skill directories into `.codex/skills/` or the host's documented Agent Skills directory.
 
 ### Using Individual Skills
 
-To use a single skill without installing the full plugin, copy its `SKILL.md` directly into your project's `.claude/skills/` directory:
+Agent Skills require a **directory layout**, not a flat markdown file. Copy or symlink the skill folder into your project's skills directory:
 
 ```bash
-# Example: add just the context-fundamentals skill
+# Example: add just the context-fundamentals skill to a Cursor project
+mkdir -p .cursor/skills
+cp -R skills/context-fundamentals .cursor/skills/
+
+# Claude Code project-scoped install (same directory layout)
 mkdir -p .claude/skills
-curl -o .claude/skills/context-fundamentals.md \
-  https://raw.githubusercontent.com/muratcankoylan/Agent-Skills-for-Context-Engineering/main/skills/context-fundamentals/SKILL.md
+cp -R skills/context-fundamentals .claude/skills/
+
+# Codex project-scoped install
+mkdir -p .codex/skills
+cp -R skills/context-fundamentals .codex/skills/
 ```
+
+Do not flatten `SKILL.md` into a single file at `.claude/skills/context-fundamentals.md`. That breaks relative `references/` paths and violates the Agent Skills directory spec used by Cursor, Claude Code, and Codex.
 
 Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `harness-engineering`, `project-development`, `bdi-mental-states`
 
@@ -255,8 +274,16 @@ Reproduce any of these numbers exactly via the runner under `researcher/benchmar
 
 ### Operator commands
 
+Install the reference validator once before running the platform-compatibility gate locally:
+
+```bash
+python3 -m pip install skills-ref
+```
+
 ```bash
 # Deterministic gates (also run in CI on every PR)
+python3 -m unittest researcher.scripts.tests.test_skill_frontmatter
+python3 researcher/scripts/validate_platform_compat.py --require-reference-validator
 python3 researcher/scripts/validate_repo.py --strict
 python3 researcher/scripts/skill_health.py --strict --no-history
 python3 researcher/scripts/run_benchmarks.py

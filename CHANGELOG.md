@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented here. Versions follow semantic versioning where practical, with skill content treated as data.
 
+## [Unreleased]
+
+### Fixed
+
+- **Cross-platform YAML frontmatter**: 11 of 15 published skills used unquoted `description` values containing colons, which strict YAML parsers (Cursor, Claude Code, Codex, Agent Skills validators) reject. All skill descriptions now use YAML-safe quoting; `memory-systems` no longer uses a folded block scalar that repo validators misread as `">"`.
+- **Shared frontmatter parser**: added `researcher/scripts/skill_frontmatter.py` and wired it into `validate_repo.py`, `skill_health.py`, `check_activation_cases.py`, and `compare_skill_revisions.py`. CI installs `pyyaml` for deterministic strict parsing. The parser handles LF/CRLF line endings, UTF-8 BOM, quoted scalars, and folded block scalars, and rejects empty, too-short, or indicator-only descriptions.
+- **Unit tests**: added `researcher/scripts/tests/test_skill_frontmatter.py` (19 tests) covering parser edge cases, a strict-YAML regression guard for the unquoted-colon bug, format/parse round-trips, and a corpus integration test asserting every published skill parses clean. Wired into CI before the strict repo gate.
+- **Example skills**: quoted the `description` fields in `examples/digital-brain-skill/SKILL.md` and `examples/book-sft-pipeline/SKILL.md`, which had the same unquoted-colon YAML hazard developers would copy.
+- **Manifest validation**: `validate_repo.py --strict` now checks that `.plugin/plugin.json` and `.claude-plugin/marketplace.json` name the same bundled plugin and that Open Plugins `skills` discovery resolves to the same 15 published skills as the repository.
+- **Platform compatibility gate**: added `researcher/scripts/validate_platform_compat.py`, which validates the published skills with the upstream `agentskills` CLI from `skills-ref`, checks Open Plugins and Claude marketplace discovery parity, and simulates directory-copy installs for `.cursor/skills`, `.claude/skills`, `.codex/skills`, and `.agents/skills`.
+- **Platform install docs**: README now documents directory-based install paths for Cursor (`.cursor/skills/`), Claude Code (`.claude/skills/`), and Codex (`.codex/skills/`) instead of the broken flat-file `.md` pattern.
+- **Open Plugins discovery**: `.plugin/plugin.json` now declares `"skills": "./skills/"`. The repository does not commit `.agents/skills` or `.cursor/skills` symlinks because symlinks are fragile on Windows and in plugin packaging.
+
 ## [2.3.0] - 2026-05-15
 
 First release with measured benchmark results across four frontier models, closing the loop from "we wrote skill descriptions" to "we proved they route correctly."
