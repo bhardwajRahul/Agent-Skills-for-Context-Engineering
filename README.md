@@ -344,7 +344,7 @@ This repository follows the Agent Skills open development model. Contributions a
 4. Document trade-offs and potential issues
 5. Keep SKILL.md under 500 lines for optimal performance
 
-Feel free to contact [Muratcan Koylan](https://x.com/koylanai) for collaboration opportunities or any inquiries.
+Feel free to contact [Muratcan Koylan](https://x.com/muratcan) for collaboration opportunities or any inquiries.
 
 ## License
 
