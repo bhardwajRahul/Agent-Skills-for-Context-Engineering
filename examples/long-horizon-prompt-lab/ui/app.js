@@ -74,12 +74,12 @@
     root.appendChild(split);
 
     // Scorecard
-    root.appendChild(el("div", "section-title", "Pre-launch rubric scorecard"));
+    root.appendChild(el("div", "section-title", "Structural audit"));
     root.appendChild(scorecard(pair));
     root.appendChild(legend());
 
     // Deltas + residual
-    root.appendChild(el("div", "section-title", "What the skill changed"));
+    root.appendChild(el("div", "section-title", "Material changes"));
     const cols = el("div", "two-col");
     const ul = el("ul", "deltas");
     pair.deltas.forEach((d) => {
@@ -102,13 +102,13 @@
     const isBefore = kind === "before";
     const panel = el("div", "panel panel-" + kind);
     const h = el("div", "panel-head");
-    h.appendChild(el("span", "panel-tag", isBefore ? "Before \u2014 prompt-engineered" : "After \u2014 skill-optimized brief"));
+    h.appendChild(el("span", "panel-tag", isBefore ? "01 / Conventional prompt" : "02 / Pseudo-formal brief"));
     const block = pair.score_summary[kind];
     h.appendChild(el("span", "panel-score", scoreLine(block)));
     panel.appendChild(h);
 
     panel.appendChild(el("div", "panel-caption",
-      isBefore ? "Techniques used in this baseline prompt:" : "Blocks added by the pseudo-formal task brief:"));
+      isBefore ? "Existing prompt techniques" : "Specification added"));
 
     if (isBefore) {
       const tech = el("div", "techniques");

@@ -506,8 +506,8 @@ def build() -> dict:
     agg_after = sum(p["score_summary"]["after"]["pct"] for p in pairs_out) / len(pairs_out)
     return {
         "meta": {
-            "title": "Long-Horizon Prompt Lab",
-            "subtitle": "Before / after: competent launch prompts vs skill-optimized pseudo-formal task briefs",
+            "title": "Prompts for work that does not end in one turn.",
+            "subtitle": "Four conventional launch prompts, rewritten as pseudo-formal task briefs for long-running agents.",
             "skill": "long-horizon-prompting",
             "exemplar": "OpenAI GPT-5.6 Sol Ultra Cycle Double Cover run (July 2026)",
             "rubric_source": "skills/long-horizon-prompting/references/task-brief-template.md",
