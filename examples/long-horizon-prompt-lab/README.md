@@ -9,7 +9,7 @@ This example was built by applying the skill to itself: the "after" briefs are w
 brief-writing workflow produces, and the scoring uses the rubric from
 [`task-brief-template.md`](../../skills/long-horizon-prompting/references/task-brief-template.md).
 
-![Aggregate before/after](screenshots/hero.png)
+![Aggregate before/after](screenshots/editorial-hero.png)
 
 ## What is here
 

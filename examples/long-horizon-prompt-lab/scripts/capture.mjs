@@ -1,9 +1,12 @@
 // Capture before/after screenshots of the Long-Horizon Prompt Lab UI.
 // Uses puppeteer-core driving the system Chrome. Produces, per use case:
-//   <id>-full.png     the whole page (hero + prompts + scorecard + deltas)
-//   <id>-split.png    just the before/after prompt panels (the money shot)
-//   <id>-scorecard.png the rubric scorecard
-// Plus hero.png (the aggregate banner) for the release header.
+//   editorial-<id>-full.png      the whole page
+//   editorial-<id>-split.png     the parallel prompt documents
+//   editorial-<id>-scorecard.png the structural audit
+// Plus editorial-hero.png for the release header.
+//
+// The editorial- prefix is intentional: it gives the redesigned assets distinct
+// URLs so image caches cannot serve the superseded dark-dashboard screenshots.
 //
 // Usage: node scripts/capture.mjs
 import { existsSync } from "node:fs";
@@ -77,7 +80,7 @@ async function main() {
   console.log("Use cases:", ids.join(", "));
 
   // Hero banner (aggregate) for the release header.
-  await clipElement(page, "#hero", resolve(OUT, "hero.png"), 0);
+  await clipElement(page, "#hero", resolve(OUT, "editorial-hero.png"), 0);
 
   for (const id of ids) {
     console.log("Capturing", id);
@@ -87,12 +90,12 @@ async function main() {
     if (rendered !== expected) {
       throw new Error(`Rendered pair "${rendered}" != expected "${expected}" for id ${id}`);
     }
-    await clipElement(page, "#pair-split", resolve(OUT, `${id}-split.png`), 12);
-    await clipElement(page, "#scorecard", resolve(OUT, `${id}-scorecard.png`), 12);
+    await clipElement(page, "#pair-split", resolve(OUT, `editorial-${id}-split.png`), 12);
+    await clipElement(page, "#scorecard", resolve(OUT, `editorial-${id}-scorecard.png`), 12);
 
     await load(id, FULL_DPR);
-    await page.screenshot({ path: resolve(OUT, `${id}-full.png`), fullPage: true });
-    console.log("  wrote", `screenshots/${id}-full.png`);
+    await page.screenshot({ path: resolve(OUT, `editorial-${id}-full.png`), fullPage: true });
+    console.log("  wrote", `screenshots/editorial-${id}-full.png`);
   }
 
   await browser.close();
