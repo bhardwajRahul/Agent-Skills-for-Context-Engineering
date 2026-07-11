@@ -37,6 +37,7 @@ These skills cover the patterns and structures for building effective agent syst
 | Skill | Description |
 |-------|-------------|
 | [multi-agent-patterns](skills/multi-agent-patterns/) | Master orchestrator, peer-to-peer, and hierarchical multi-agent architectures |
+| [long-horizon-prompting](skills/long-horizon-prompting/) | **NEW** Write pseudo-formal task briefs for long-running autonomous agents and parallel orchestrations: exact success predicates, non-counting outcomes, audit-gated return conditions, effort floors, and diversity policies, modeled on the published GPT-5.6 Sol Ultra Cycle Double Cover prompt |
 | [memory-systems](skills/memory-systems/) | Design short-term, long-term, and graph-based memory architectures |
 | [tool-design](skills/tool-design/) | Build tools that agents can use effectively |
 | [filesystem-context](skills/filesystem-context/) | Use filesystems for dynamic context discovery, tool output offloading, and plan persistence |
@@ -115,7 +116,7 @@ Option B - Direct install via command:
 /plugin install context-engineering@context-engineering-marketplace
 ```
 
-This installs all 16 skills in a single plugin. Skills are activated automatically based on your task context.
+This installs all 17 skills in a single plugin. Skills are activated automatically based on your task context.
 
 ### Skill Activation Scenarios
 
@@ -127,6 +128,7 @@ This installs all 16 skills in a single plugin. Skills are activated automatical
 | `context-optimization` | Improving token efficiency, retrieval precision, prefix reuse, masking, partitioning, or budget allocation for agent systems |
 | `latent-briefing` | Sharing orchestrator trajectory with workers via task-guided KV cache compaction when the worker runtime is controllable and the models are compatible |
 | `multi-agent-patterns` | Choosing coordination patterns, isolating context across agents, designing handoffs, or evaluating whether parallel agents are justified |
+| `long-horizon-prompting` | Writing or evaluating the launch prompt for a long-running autonomous agent or parallel orchestration: success predicates, non-counting outcomes, persistence and stop rules, adversarial audit gates, and portfolio diversity policies |
 | `memory-systems` | Persisting cross-session knowledge, tracking entities over time, choosing memory frameworks, or designing retrieval and update semantics |
 | `tool-design` | Defining agent-tool contracts, consolidating tool surfaces, improving descriptions, or making tool errors actionable |
 | `filesystem-context` | Moving large or durable context into files, creating scratchpads, supporting just-in-time discovery, or coordinating agents through shared artifacts |
@@ -153,7 +155,7 @@ This repository ships as an [Open Plugins](https://open-plugins.com) plugin. Hos
 **Codex / GitHub Copilot CLI / other Open Plugins hosts:**
 
 1. Clone or add this repository as a plugin directory.
-2. The host reads `.plugin/plugin.json` and discovers all 16 skills under `skills/`.
+2. The host reads `.plugin/plugin.json` and discovers all 17 skills under `skills/`.
 3. For project-local manual installs, copy skill directories into `.codex/skills/` or the host's documented Agent Skills directory.
 
 ### Using Individual Skills
@@ -180,7 +182,7 @@ cp -R skills/context-fundamentals .agents/skills/
 
 Do not flatten `SKILL.md` into a single file at `.claude/skills/context-fundamentals.md`. That breaks relative `references/` paths and violates the Agent Skills directory spec used by Cursor, Claude Code, and Codex.
 
-Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `harness-engineering`, `self-improvement-loops`, `project-development`, `bdi-mental-states`
+Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `long-horizon-prompting`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `harness-engineering`, `self-improvement-loops`, `project-development`, `bdi-mental-states`
 
 ### For Custom Implementations
 

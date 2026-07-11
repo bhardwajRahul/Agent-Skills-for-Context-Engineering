@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented here. Versions follow semantic versioning where practical, with skill content treated as data.
 
+## [2.5.0] - 2026-07-11
+
+### Added
+
+#### New skill: long-horizon-prompting
+
+- `skills/long-horizon-prompting/SKILL.md`: seventeenth skill, covering the launch prompt for long-running autonomous agents and parallel multi-agent orchestrations. Core technique is the pseudo-formal task brief: definitions with degenerate cases, an exact success predicate, enumerated non-counting outcomes, an orchestration policy with an approach-family registry and blocked-route bookkeeping, adversarial audit with enumerated failure modes, an audit-gated return condition, effort floors, and contamination guards. Anchored on the published GPT-5.6 Sol Ultra Cycle Double Cover prompt (OpenAI, July 2026), with each element cross-checked against vendor doctrine (OpenAI GPT-5 through GPT-5.6 Sol guides, multi-agent API; Anthropic multi-agent research system, long-running harnesses, Claude Fable 5 docs) and 2025-2026 research (PushBench arXiv 2605.23574, context-rot give-up drift arXiv 2606.29718, diversity collapse arXiv 2604.18005 and 2604.03809, verification gap arXiv 2602.18998, QEDBench arXiv 2602.20629, block verification arXiv 2605.20531, AOrchestra arXiv 2602.03786, METR GPT-5.6 Sol predeployment evaluation).
+- Four reference files: annotated CDC prompt with provenance and honest caveats (unreviewed proof, no public ablation), dated vendor guidance extracts, dated research evidence with an element-to-evidence mapping, and a reusable task-brief template with a 10-dimension pre-launch evaluation rubric.
+- Explicit boundaries: `multi-agent-patterns` owns topology and coordination mechanics, `harness-engineering` owns runtime-enforced constraints, `evaluation`/`advanced-evaluation` own evaluator and judge construction.
+
+#### Corpus wiring
+
+- 3 new mechanisms in `researcher/mechanisms/registry.jsonl`: `pseudo-formal-task-specification`, `audit-gated-return-condition`, `independent-portfolio-approach-registry` (22 total), with accepted-ledger entries pending human PR review.
+- 8 new provenance-tracked claims in `researcher/claims/index.jsonl` (26 total).
+- 2 new activation cases (23 total) covering the long-horizon-prompting vs multi-agent-patterns boundary.
+- 3 new router-benchmark prompts (p054-p056); the next paid router sweep should publish the delta per the benchmark policy.
+- Manifests bumped to 2.5.0; README, root SKILL.md, CLAUDE.md, and AGENTS.md updated for 17 skills.
+
 ## [2.4.0] - 2026-07-08
 
 ### Added
