@@ -1,12 +1,12 @@
 // Capture before/after screenshots of the Long-Horizon Prompt Lab UI.
 // Uses puppeteer-core driving the system Chrome. Produces, per use case:
-//   editorial-<id>-full.png      the whole page
-//   editorial-<id>-split.png     the parallel prompt documents
-//   editorial-<id>-scorecard.png the structural audit
-// Plus editorial-hero.png for the release header.
+//   optimized-<id>-full.png      the whole page
+//   optimized-<id>-split.png     the parallel prompt documents
+//   optimized-<id>-scorecard.png the structural audit
+// Plus optimized-hero.png for the release header.
 //
-// The editorial- prefix is intentional: it gives the redesigned assets distinct
-// URLs so image caches cannot serve the superseded dark-dashboard screenshots.
+// The optimized- prefix is intentional: it gives the complete-prompt revision
+// distinct URLs so image caches cannot serve the superseded template-like prompts.
 //
 // Usage: node scripts/capture.mjs
 import { existsSync } from "node:fs";
@@ -80,7 +80,7 @@ async function main() {
   console.log("Use cases:", ids.join(", "));
 
   // Hero banner (aggregate) for the release header.
-  await clipElement(page, "#hero", resolve(OUT, "editorial-hero.png"), 0);
+  await clipElement(page, "#hero", resolve(OUT, "optimized-hero.png"), 0);
 
   for (const id of ids) {
     console.log("Capturing", id);
@@ -90,12 +90,12 @@ async function main() {
     if (rendered !== expected) {
       throw new Error(`Rendered pair "${rendered}" != expected "${expected}" for id ${id}`);
     }
-    await clipElement(page, "#pair-split", resolve(OUT, `editorial-${id}-split.png`), 12);
-    await clipElement(page, "#scorecard", resolve(OUT, `editorial-${id}-scorecard.png`), 12);
+    await clipElement(page, "#pair-split", resolve(OUT, `optimized-${id}-split.png`), 12);
+    await clipElement(page, "#scorecard", resolve(OUT, `optimized-${id}-scorecard.png`), 12);
 
     await load(id, FULL_DPR);
-    await page.screenshot({ path: resolve(OUT, `editorial-${id}-full.png`), fullPage: true });
-    console.log("  wrote", `screenshots/editorial-${id}-full.png`);
+    await page.screenshot({ path: resolve(OUT, `optimized-${id}-full.png`), fullPage: true });
+    console.log("  wrote", `screenshots/optimized-${id}-full.png`);
   }
 
   await browser.close();

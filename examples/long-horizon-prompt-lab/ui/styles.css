@@ -317,12 +317,25 @@ code {
   border-bottom: 1px solid var(--rule);
 }
 
+.panel-tools {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
 .panel-tag {
   color: var(--ink);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
+}
+
+.word-count {
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
 }
 
 .panel-score {
@@ -334,6 +347,23 @@ code {
   font-family: var(--mono);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+}
+
+.copy-button {
+  padding: 0 0 2px;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 10px;
+}
+
+.copy-button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .panel-after .panel-score {
@@ -373,18 +403,19 @@ code {
 }
 
 pre.prompt {
-  min-height: 0;
+  height: 820px;
   margin: 0;
-  padding: 24px 0 30px;
-  overflow: visible;
+  padding: 24px 14px 30px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   color: #4f4c46;
   background: none;
   border: 0;
   border-top: 1px solid var(--rule);
   border-radius: 0;
   font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.58;
+  font-size: 12px;
+  line-height: 1.62;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -655,6 +686,10 @@ pre.prompt {
     padding-left: 0;
     border-top: 1px solid var(--ink);
     border-left: 0 !important;
+  }
+
+  pre.prompt {
+    height: 680px;
   }
 
   .deltas li {

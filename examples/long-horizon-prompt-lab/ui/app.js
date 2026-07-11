@@ -102,13 +102,34 @@
     const isBefore = kind === "before";
     const panel = el("div", "panel panel-" + kind);
     const h = el("div", "panel-head");
-    h.appendChild(el("span", "panel-tag", isBefore ? "01 / Conventional prompt" : "02 / Pseudo-formal brief"));
+    h.appendChild(el("span", "panel-tag", isBefore ? "01 / Original prompt" : "02 / Optimized prompt"));
     const block = pair.score_summary[kind];
-    h.appendChild(el("span", "panel-score", scoreLine(block)));
+    const tools = el("div", "panel-tools");
+    const words = pair[kind].trim().split(/\s+/).length;
+    tools.appendChild(el("span", "word-count", words + " words"));
+    tools.appendChild(el("span", "panel-score", scoreLine(block)));
+    const copy = el("button", "copy-button", "Copy");
+    copy.type = "button";
+    copy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(pair[kind]);
+      } catch (_) {
+        const area = document.createElement("textarea");
+        area.value = pair[kind];
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      copy.textContent = "Copied";
+      setTimeout(() => { copy.textContent = "Copy"; }, 1200);
+    });
+    tools.appendChild(copy);
+    h.appendChild(tools);
     panel.appendChild(h);
 
     panel.appendChild(el("div", "panel-caption",
-      isBefore ? "Existing prompt techniques" : "Specification added"));
+      isBefore ? "Original launch prompt" : "Ready to paste into a long-running agent"));
 
     if (isBefore) {
       const tech = el("div", "techniques");
@@ -116,8 +137,8 @@
       panel.appendChild(tech);
     } else {
       const tech = el("div", "techniques");
-      ["definitions", "success predicate", "non-counting outcomes", "adversarial audit",
-       "return condition", "effort floor", "contamination guard"].forEach((t) =>
+      ["exact success predicate", "named non-solutions", "evidence contract",
+       "adversarial verification", "return gate", "harness boundaries"].forEach((t) =>
         tech.appendChild(el("span", "technique", t)));
       panel.appendChild(tech);
     }

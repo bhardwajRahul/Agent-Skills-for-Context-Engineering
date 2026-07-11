@@ -5,11 +5,11 @@ skill. It takes four competent, prompt-engineered launch prompts for long-runnin
 agents, applies the skill to each, and scores both versions against the skill's own 10-dimension
 pre-launch rubric. A static UI renders the pairs side by side for screenshotting.
 
-This example was built by applying the skill to itself: the "after" briefs are what the skill's
-brief-writing workflow produces, and the scoring uses the rubric from
+This example was built by applying the skill to itself: each "after" is a complete launch prompt
+produced with the skill's brief-writing workflow, and the scoring uses the rubric from
 [`task-brief-template.md`](../../skills/long-horizon-prompting/references/task-brief-template.md).
 
-![Aggregate before/after](screenshots/editorial-hero.png)
+![Aggregate before/after](screenshots/optimized-hero.png)
 
 ## What is here
 
@@ -34,8 +34,9 @@ screenshots/       Generated PNGs for sharing
 ## The four use cases
 
 Each "before" is a genuine prompt-engineered launch prompt (expert persona, task context,
-chain-of-thought, explicit output format, persistence). None is a strawman. The "after" is the
-same task rewritten as a pseudo-formal task brief.
+chain-of-thought, explicit output format, persistence). None is a strawman. Each "after" is a
+complete, copy-ready prompt that applies the pseudo-formal task-brief method; it is not a template
+or an outline.
 
 | Use case | Domain | Topology | Failure the brief pre-blocks |
 | --- | --- | --- | --- |
