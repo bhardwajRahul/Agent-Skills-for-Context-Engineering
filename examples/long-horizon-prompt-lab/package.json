@@ -1,15 +1,24 @@
 {
-  "name": "long-horizon-prompt-lab",
+  "name": "long-horizon-prompting-site",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "Static educational site and prompt lab for the long-horizon-prompting Agent Skill.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "python3 scripts/build_lab.py",
+    "validate": "python3 scripts/validate_site.py",
+    "test:browser": "node scripts/test_site.mjs",
+    "capture": "node scripts/capture.mjs",
+    "serve": "python3 -m http.server 8000 --directory ui",
+    "test": "npm run build && npm run validate && npm run test:browser"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "keywords": [
+    "agent-skills",
+    "long-horizon-agents",
+    "prompt-engineering",
+    "context-engineering"
+  ],
+  "license": "MIT",
+  "devDependencies": {
     "puppeteer-core": "^23.11.1"
   }
 }
