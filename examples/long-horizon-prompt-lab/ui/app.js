@@ -16,6 +16,27 @@
     if (text != null) n.textContent = text;
     return n;
   };
+  const INSTALL_COMMAND = [
+    "git clone --depth 1 https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git /tmp/context-engineering-skills",
+    "mkdir -p .cursor/skills",
+    "cp -R /tmp/context-engineering-skills/skills/long-horizon-prompting .cursor/skills/",
+  ].join(" && ");
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (_) {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+    }
+  }
 
   const rubricById = Object.fromEntries(DATA.rubric.map((d) => [d.id, d]));
 
@@ -33,7 +54,12 @@
   $("#agg-gain").textContent = "+" + DATA.meta.aggregate.gain_pp;
   $("#agg-pairs").textContent = DATA.meta.aggregate.pairs;
   $("#honesty-note").textContent = DATA.meta.honesty_note;
-  $("#rubric-source").textContent = DATA.meta.rubric_source;
+  $("#copy-install").addEventListener("click", async () => {
+    await copyText(INSTALL_COMMAND);
+    const status = $("#install-status");
+    status.textContent = "Install command copied.";
+    setTimeout(() => { status.textContent = ""; }, 1800);
+  });
 
   // ---- Tabs ----
   const tabs = $("#tabs");
@@ -149,16 +175,7 @@
     const copy = el("button", "copy-button", "Copy");
     copy.type = "button";
     copy.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(pair[kind]);
-      } catch (_) {
-        const area = document.createElement("textarea");
-        area.value = pair[kind];
-        document.body.appendChild(area);
-        area.select();
-        document.execCommand("copy");
-        area.remove();
-      }
+      await copyText(pair[kind]);
       copy.textContent = "Copied";
       setTimeout(() => { copy.textContent = "Copy"; }, 1200);
     });

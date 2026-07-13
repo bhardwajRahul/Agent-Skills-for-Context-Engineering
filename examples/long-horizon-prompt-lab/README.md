@@ -11,6 +11,21 @@ produced with the skill's brief-writing workflow, and the scoring uses the rubri
 
 ![Aggregate before/after](screenshots/shot-hero.png)
 
+## Website
+
+The same interface is deployable as a static GitHub Pages site:
+
+`https://muratcankoylan.github.io/Agent-Skills-for-Context-Engineering/`
+
+The website shows the complete prompt text (no fixed-height clipping), supports direct links to
+each use case through URL hashes, provides a Copy action for every original and optimized prompt,
+and links to the skill source on GitHub. The screenshot renderer adds a capture-only body class so
+release PNGs remain bounded without changing the website.
+
+Deployment is defined in `.github/workflows/deploy-prompt-lab.yml`. GitHub Pages is not currently
+enabled for the repository, so the owner must select **Settings → Pages → Build and deployment →
+GitHub Actions** once after merge, then run the workflow manually or push a matching site change.
+
 ## What is here
 
 ```

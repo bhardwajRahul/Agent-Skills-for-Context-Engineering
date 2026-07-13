@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Long-Horizon Prompting — Four comparative briefs</title>
+  <meta name="description" content="Four complete before-and-after prompts for long-running AI agents, built with the long-horizon-prompting skill." />
+  <meta name="theme-color" content="#f5f3ee" />
+  <meta property="og:title" content="Prompts for work that does not end in one turn" />
+  <meta property="og:description" content="Four original prompts rewritten as complete, copy-ready prompts for long-running agents." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="social-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>Long-Horizon Prompting — Complete prompt comparisons</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -38,7 +45,41 @@
         Four comparative briefs. Installed at <code>.cursor/skills/long-horizon-prompting</code>
         and validated against the Agent Skills reference implementation.
       </p>
+
+      <div class="release-actions" aria-label="Release actions">
+        <a class="action action-primary"
+           href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/tree/main/skills/long-horizon-prompting"
+           target="_blank" rel="noreferrer">
+          Get the skill on GitHub <span aria-hidden="true">↗</span>
+        </a>
+        <button class="action" id="copy-install" type="button">Copy Cursor install command</button>
+        <a class="action"
+           href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering"
+           target="_blank" rel="noreferrer">
+          View repository <span aria-hidden="true">↗</span>
+        </a>
+        <span class="copy-status" id="install-status" aria-live="polite"></span>
+      </div>
     </header>
+
+    <section class="release-intro" aria-labelledby="release-title">
+      <p class="section-eyebrow">Release / v2.5.0</p>
+      <div class="release-intro-grid">
+        <h2 id="release-title">Specification engineering for autonomous work.</h2>
+        <div class="release-copy">
+          <p>
+            Persistence is not correctness. As RL and agent harnesses extend task horizons,
+            ambiguous completion criteria give an optimizing agent more opportunities to return
+            an answer-shaped near miss.
+          </p>
+          <p>
+            This skill turns a launch prompt into a concrete specification: exact success,
+            named non-solutions, evidence requirements, adversarial verification, and a return
+            gate. Select a case below to compare and copy the complete prompts.
+          </p>
+        </div>
+      </div>
+    </section>
 
     <nav id="tabs" class="tabs" aria-label="Use cases"></nav>
 
@@ -47,10 +88,12 @@
     <footer class="foot">
       <p id="honesty-note" class="honesty"></p>
       <p class="meta-line">
-        Rubric: <code id="rubric-source"></code> &middot;
-        Report provenance: <code>report/PROVENANCE.md</code> (SHA-256 pinned) &middot;
-        Exemplar prompt and candidate proof: <code>report/cdc_prompt.pdf</code>,
-        <code>report/cdc_proof.pdf</code>
+        <a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/blob/main/skills/long-horizon-prompting/references/task-brief-template.md"
+           target="_blank" rel="noreferrer">Pre-launch rubric ↗</a> &middot;
+        <a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/blob/main/examples/long-horizon-prompt-lab/report/PROVENANCE.md"
+           target="_blank" rel="noreferrer">Report provenance ↗</a> &middot;
+        <a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/tree/main/skills/long-horizon-prompting"
+           target="_blank" rel="noreferrer">Skill source ↗</a>
       </p>
     </footer>
   </div>

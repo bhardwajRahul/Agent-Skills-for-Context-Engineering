@@ -1,0 +1,57 @@
+name: Deploy long-horizon prompt lab
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/deploy-prompt-lab.yml"
+      - "examples/long-horizon-prompt-lab/data/**"
+      - "examples/long-horizon-prompt-lab/scripts/build_lab.py"
+      - "examples/long-horizon-prompt-lab/screenshots/shot-hero.png"
+      - "examples/long-horizon-prompt-lab/ui/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify generated prompt data
+        run: |
+          python3 examples/long-horizon-prompt-lab/scripts/build_lab.py
+          git diff --exit-code -- \
+            examples/long-horizon-prompt-lab/data/prompt-pairs.json \
+            examples/long-horizon-prompt-lab/ui/data.js
+
+      - name: Assemble static site
+        run: |
+          mkdir -p _site
+          cp -R examples/long-horizon-prompt-lab/ui/. _site/
+          cp examples/long-horizon-prompt-lab/screenshots/shot-hero.png _site/social-card.png
+          touch _site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

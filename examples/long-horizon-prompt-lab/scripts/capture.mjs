@@ -72,7 +72,10 @@ async function main() {
     await page.setViewport({ width: WIDTH, height: 1000, deviceScaleFactor: dpr });
     await page.goto(base + (id ? "#" + id : ""), { waitUntil: "networkidle0" });
     await page.reload({ waitUntil: "networkidle0" });
-    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await page.evaluate(() => {
+      document.body.classList.add("capture-mode");
+      return new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    });
   }
 
   await load("", CROP_DPR);
