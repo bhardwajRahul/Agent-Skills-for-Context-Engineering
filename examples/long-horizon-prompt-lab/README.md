@@ -1,9 +1,9 @@
-# Long-Horizon Prompt Lab
+# Long-Horizon Prompting Website
 
-A before/after showcase for the [`long-horizon-prompting`](../../skills/long-horizon-prompting/)
-skill. It takes four competent, prompt-engineered launch prompts for long-running autonomous
-agents, applies the skill to each, and scores both versions against the skill's own 10-dimension
-pre-launch rubric. A static UI renders the pairs side by side for screenshotting.
+A dependency-free educational website and before/after lab for the
+[`long-horizon-prompting`](../../skills/long-horizon-prompting/) skill. It explains the method,
+provides a copyable builder template and checklist, maps the research evidence and caveats, and
+shows four complete prompt rewrites.
 
 This example was built by applying the skill to itself: each "after" is a complete launch prompt
 produced with the skill's brief-writing workflow, and the scoring uses the rubric from
@@ -13,14 +13,19 @@ produced with the skill's brief-writing workflow, and the scoring uses the rubri
 
 ## Website
 
-The same interface is deployable as a static GitHub Pages site:
+The site is deployable through GitHub Pages:
 
 `https://muratcankoylan.github.io/Agent-Skills-for-Context-Engineering/`
 
-The website shows the complete prompt text (no fixed-height clipping), supports direct links to
-each use case through URL hashes, provides a Copy action for every original and optimized prompt,
-and links to the skill source on GitHub. The screenshot renderer adds a capture-only body class so
-release PNGs remain bounded without changing the website.
+Pages:
+
+- `index.html`: topic overview, brief anatomy, system boundaries, and routes into the site
+- `guide.html`: eight-step method, prompt/harness split, copyable template, checklist, and gotchas
+- `lab.html`: complete prompt comparisons, downloads, copy controls, rubric, and residual risks
+- `references.html`: research, vendor guidance, CDC case notes, evidence labels, and caveats
+
+Website prompts expand fully. The screenshot renderer adds a capture-only body class so release
+PNGs remain bounded without changing the site.
 
 Deployment is defined in `.github/workflows/deploy-prompt-lab.yml`. GitHub Pages is not currently
 enabled for the repository, so the owner must select **Settings → Pages → Build and deployment →
@@ -29,7 +34,7 @@ GitHub Actions** once after merge, then run the workflow manually or push a matc
 ## What is here
 
 ```
-report/            The exemplar the skill is anchored on, fetched local with provenance
+report/            CDC case-study artifacts, fetched local with provenance
   cdc_prompt.pdf     OpenAI's published GPT-5.6 Sol Ultra Cycle Double Cover prompt
   cdc_proof.pdf      The candidate proof (unreviewed; see caveats)
   cdc_prompt.txt     Text extraction (for grep/diff)
@@ -40,9 +45,10 @@ scripts/
   verify_report.py   Assert the skill's annotated CDC reference matches the published prompt
   install_skill.sh   Install the skill into .cursor/skills and validate it
   build_lab.py       Source of truth: prompt pairs + rubric scores -> data/ and ui/data.js
+  validate_site.py   Deterministic pages, metadata, link, reference, sitemap, and prompt checks
   capture.mjs        Render the UI and capture the release screenshots
 data/prompt-pairs.json  Machine-readable pairs and scores
-ui/                Static, dependency-free UI (open index.html directly)
+ui/                Static multi-page site and generated prompt downloads
 screenshots/       Generated PNGs for sharing
 ```
 
@@ -77,13 +83,17 @@ python3 examples/long-horizon-prompt-lab/scripts/verify_report.py
 # 2. Install the skill into this project's .cursor/skills and validate it
 examples/long-horizon-prompt-lab/scripts/install_skill.sh
 
-# 3. Regenerate the pair data and the screenshots
-python3 examples/long-horizon-prompt-lab/scripts/build_lab.py
-cd examples/long-horizon-prompt-lab && npm install && node scripts/capture.mjs
+# 3. Build, validate, serve, or capture the site
+cd examples/long-horizon-prompt-lab
+npm ci
+npm test
+npm run serve
+# In another terminal: npm run capture
 ```
 
-The UI is static: open `ui/index.html` directly in a browser, or serve the folder. Use the tabs
-to switch use cases; the URL hash (`#security-audit`) deep-links a case for consistent captures.
+Open `http://localhost:8000/`. Prompt Lab cases use URL hashes such as
+`lab.html#security-audit`. The site remains file-safe for local inspection, while HTTP is
+recommended for clipboard behavior and production parity.
 
 ## How to read the scorecard
 

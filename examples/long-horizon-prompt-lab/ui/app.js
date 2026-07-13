@@ -16,28 +16,6 @@
     if (text != null) n.textContent = text;
     return n;
   };
-  const INSTALL_COMMAND = [
-    "git clone --depth 1 https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git /tmp/context-engineering-skills",
-    "mkdir -p .cursor/skills",
-    "cp -R /tmp/context-engineering-skills/skills/long-horizon-prompting .cursor/skills/",
-  ].join(" && ");
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (_) {
-      const area = document.createElement("textarea");
-      area.value = text;
-      area.setAttribute("readonly", "");
-      area.style.position = "fixed";
-      area.style.opacity = "0";
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand("copy");
-      area.remove();
-    }
-  }
-
   const rubricById = Object.fromEntries(DATA.rubric.map((d) => [d.id, d]));
 
   function badge(score) {
@@ -54,12 +32,6 @@
   $("#agg-gain").textContent = "+" + DATA.meta.aggregate.gain_pp;
   $("#agg-pairs").textContent = DATA.meta.aggregate.pairs;
   $("#honesty-note").textContent = DATA.meta.honesty_note;
-  $("#copy-install").addEventListener("click", async () => {
-    await copyText(INSTALL_COMMAND);
-    const status = $("#install-status");
-    status.textContent = "Install command copied.";
-    setTimeout(() => { status.textContent = ""; }, 1800);
-  });
 
   // ---- Tabs ----
   const tabs = $("#tabs");
@@ -68,8 +40,29 @@
     t.appendChild(el("span", "tab-title", pair.title));
     t.appendChild(el("span", "tab-domain", pair.domain));
     t.dataset.id = pair.id;
+    t.id = "tab-" + pair.id;
+    t.type = "button";
+    t.setAttribute("role", "tab");
+    t.setAttribute("aria-controls", "pair-panel");
+    t.setAttribute("aria-selected", "false");
+    t.tabIndex = -1;
     t.addEventListener("click", () => select(pair.id));
     tabs.appendChild(t);
+  });
+
+  tabs.addEventListener("keydown", (event) => {
+    const controls = [...tabs.querySelectorAll('[role="tab"]')];
+    const current = controls.indexOf(document.activeElement);
+    if (current < 0) return;
+    let next = current;
+    if (event.key === "ArrowRight") next = (current + 1) % controls.length;
+    else if (event.key === "ArrowLeft") next = (current - 1 + controls.length) % controls.length;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = controls.length - 1;
+    else return;
+    event.preventDefault();
+    controls[next].focus();
+    select(controls[next].dataset.id);
   });
 
   function scoreLine(block) {
@@ -78,10 +71,15 @@
 
   function renderPair(pair) {
     const root = el("div");
+    root.id = "pair-panel";
+    root.setAttribute("role", "tabpanel");
+    root.setAttribute("aria-labelledby", "tab-" + pair.id);
 
     // Head
     const head = el("div", "pair-head");
-    head.appendChild(el("h2", null, pair.title));
+    const title = el("h2", null, pair.title);
+    title.id = "pair-title";
+    head.appendChild(title);
     const meta = el("div", "pair-meta");
     [["Domain", pair.domain], ["Topology", pair.topology], ["Horizon", pair.horizon]].forEach(([k, v]) => {
       const p = el("span", "pill");
@@ -100,12 +98,12 @@
     root.appendChild(split);
 
     // Scorecard
-    root.appendChild(el("div", "section-title", "Structural audit"));
+    root.appendChild(el("h3", "section-title", "Structural audit"));
     root.appendChild(scorecard(pair));
     root.appendChild(legend());
 
     // Deltas + residual
-    root.appendChild(el("div", "section-title", "Material changes"));
+    root.appendChild(el("h3", "section-title", "Material changes"));
     const cols = el("div", "two-col");
     const ul = el("ul", "deltas");
     pair.deltas.forEach((d) => {
@@ -175,11 +173,20 @@
     const copy = el("button", "copy-button", "Copy");
     copy.type = "button";
     copy.addEventListener("click", async () => {
-      await copyText(pair[kind]);
-      copy.textContent = "Copied";
-      setTimeout(() => { copy.textContent = "Copy"; }, 1200);
+      try {
+        await window.copySiteText(pair[kind]);
+        copy.textContent = "Copied";
+      } catch (_) {
+        copy.textContent = "Copy failed";
+      }
+      setTimeout(() => { copy.textContent = "Copy"; }, 1800);
     });
     tools.appendChild(copy);
+    const download = el("a", "download-link", "Download .txt");
+    const suffix = isBefore ? "original" : "optimized";
+    download.href = `prompts/${pair.id}-${suffix}.txt`;
+    download.download = `${pair.id}-${suffix}.txt`;
+    tools.appendChild(download);
     h.appendChild(tools);
     panel.appendChild(h);
 
@@ -205,10 +212,13 @@
   function scorecard(pair) {
     const table = el("table", "scorecard");
     table.id = "scorecard";
+    const caption = el("caption", "visually-hidden", "Pre-launch structural audit comparing original and optimized prompts");
+    table.appendChild(caption);
     const thead = el("thead");
     const hr = el("tr");
     ["Rubric dimension (2 = adversary-proof)", "Before", "After"].forEach((h, i) => {
       const th = el("th", i === 0 ? "" : "cell-score", h);
+      th.scope = "col";
       hr.appendChild(th);
     });
     thead.appendChild(hr);
@@ -217,10 +227,11 @@
     const tbody = el("tbody");
     DATA.rubric.forEach((dim) => {
       const tr = el("tr");
-      const nameTd = el("td");
-      nameTd.appendChild(el("div", "dim-name", dim.name));
-      nameTd.appendChild(el("div", "dim-two", dim.two));
-      tr.appendChild(nameTd);
+      const nameTh = el("th");
+      nameTh.scope = "row";
+      nameTh.appendChild(el("div", "dim-name", dim.name));
+      nameTh.appendChild(el("div", "dim-two", dim.two));
+      tr.appendChild(nameTh);
       ["before", "after"].forEach((k) => {
         const td = el("td", "cell-score");
         const b = badge(pair.scores[k][dim.id]);
@@ -232,7 +243,9 @@
     });
 
     const totalTr = el("tr", "score-total");
-    totalTr.appendChild(el("td", null, "Total (applicable dimensions)"));
+    const totalLabel = el("th", null, "Total (applicable dimensions)");
+    totalLabel.scope = "row";
+    totalTr.appendChild(totalLabel);
     ["before", "after"].forEach((k) => {
       totalTr.appendChild(el("td", "cell-score", scoreLine(pair.score_summary[k])));
     });
@@ -265,10 +278,16 @@
 
   function select(id) {
     const pair = DATA.pairs.find((p) => p.id === id) || DATA.pairs[0];
-    document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.id === pair.id));
+    document.querySelectorAll(".tab").forEach((t) => {
+      const active = t.dataset.id === pair.id;
+      t.classList.toggle("active", active);
+      t.setAttribute("aria-selected", String(active));
+      t.tabIndex = active ? 0 : -1;
+    });
     const main = $("#pair");
     main.innerHTML = "";
     main.appendChild(renderPair(pair));
+    $("#case-status").textContent = pair.title + " selected.";
     if (history.replaceState) history.replaceState(null, "", "#" + pair.id);
   }
 

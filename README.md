@@ -199,7 +199,7 @@ The [examples](examples/) folder contains complete system designs that demonstra
 | [llm-as-judge-skills](examples/llm-as-judge-skills/) | Production-ready LLM evaluation tools with TypeScript implementation, 19 passing tests | advanced-evaluation, tool-design, context-fundamentals, evaluation |
 | [book-sft-pipeline](examples/book-sft-pipeline/) | Train models to write in any author's style. Includes Gertrude Stein case study with 70% human score on Pangram, $2 total cost | project-development, context-compression, multi-agent-patterns, evaluation |
 | [interleaved-thinking](examples/interleaved-thinking/) | Reasoning trace optimizer that captures, analyzes, and converts agent failure patterns into generated skills | evaluation, advanced-evaluation, context-degradation, harness-engineering |
-| [long-horizon-prompt-lab](examples/long-horizon-prompt-lab/) | Before/after showcase that optimizes four long-running-agent launch prompts with the skill and scores both against its pre-launch rubric; static UI plus release screenshots | long-horizon-prompting, harness-engineering, multi-agent-patterns, advanced-evaluation |
+| [long-horizon-prompt-lab](examples/long-horizon-prompt-lab/) | Production-ready educational website: method guide, copyable task-brief template, four complete prompt rewrites, structural audits, and a caveated research/vendor reference catalog | long-horizon-prompting, harness-engineering, multi-agent-patterns, advanced-evaluation |
 
 Each example includes:
 - Complete PRD with architecture decisions

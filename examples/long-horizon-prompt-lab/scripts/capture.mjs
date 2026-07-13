@@ -3,7 +3,7 @@
 //   shot-<id>-full.png      the whole page
 //   shot-<id>-split.png     the parallel prompt documents
 //   shot-<id>-scorecard.png the structural audit
-// Plus shot-hero.png for the release header.
+// Plus shot-hero.png and shot-overview-full.png for the website release.
 //
 // The shot- prefix is intentional: it gives the reflowed prompt panes distinct
 // URLs so image caches cannot serve older prematurely wrapped screenshots.
@@ -17,7 +17,8 @@ import puppeteer from "puppeteer-core";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LAB = resolve(HERE, "..");
-const UI = resolve(LAB, "ui", "index.html");
+const OVERVIEW_UI = resolve(LAB, "ui", "index.html");
+const LAB_UI = resolve(LAB, "ui", "lab.html");
 const OUT = resolve(LAB, "screenshots");
 
 const CHROME_CANDIDATES = [
@@ -66,7 +67,8 @@ async function main() {
   const CROP_DPR = 2;
   const FULL_DPR = 1;
 
-  const base = pathToFileURL(UI).href;
+  const base = pathToFileURL(LAB_UI).href;
+  const overview = pathToFileURL(OVERVIEW_UI).href;
 
   async function load(id, dpr) {
     await page.setViewport({ width: WIDTH, height: 1000, deviceScaleFactor: dpr });
@@ -78,11 +80,18 @@ async function main() {
     });
   }
 
+  await page.setViewport({ width: WIDTH, height: 1000, deviceScaleFactor: CROP_DPR });
+  await page.goto(overview, { waitUntil: "networkidle0" });
+  await clipElement(page, ".page-hero", resolve(OUT, "shot-hero.png"), 0);
+
+  await page.setViewport({ width: WIDTH, height: 1000, deviceScaleFactor: FULL_DPR });
+  await page.goto(overview, { waitUntil: "networkidle0" });
+  await page.screenshot({ path: resolve(OUT, "shot-overview-full.png"), fullPage: true });
+  console.log("  wrote", "screenshots/shot-overview-full.png");
+
   await load("", CROP_DPR);
   const ids = await page.evaluate(() => window.PROMPT_LAB_DATA.pairs.map((p) => p.id));
   console.log("Use cases:", ids.join(", "));
-
-  await clipElement(page, "#hero", resolve(OUT, "shot-hero.png"), 0);
 
   for (const id of ids) {
     console.log("Capturing", id);

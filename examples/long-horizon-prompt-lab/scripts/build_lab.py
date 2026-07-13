@@ -832,8 +832,23 @@ def main() -> int:
         "window.PROMPT_LAB_DATA = " + json.dumps(data, indent=2) + ";\n",
         encoding="utf-8",
     )
+    prompts_dir = LAB / "ui" / "prompts"
+    prompts_dir.mkdir(exist_ok=True)
+    expected_prompt_files: set[str] = set()
+    for pair in data["pairs"]:
+        for source_key, suffix in (("before", "original"), ("after", "optimized")):
+            filename = f"{pair['id']}-{suffix}.txt"
+            expected_prompt_files.add(filename)
+            (prompts_dir / filename).write_text(pair[source_key].strip() + "\n", encoding="utf-8")
+    for stale in prompts_dir.glob("*.txt"):
+        if stale.name not in expected_prompt_files:
+            stale.unlink()
+
     agg = data["meta"]["aggregate"]
-    print(f"Wrote {json_path.relative_to(LAB)} and {js_path.relative_to(LAB)}")
+    print(
+        f"Wrote {json_path.relative_to(LAB)}, {js_path.relative_to(LAB)}, "
+        f"and {len(expected_prompt_files)} prompt text files"
+    )
     print(f"Pairs: {agg['pairs']} | aggregate before {agg['before_pct']}% -> after {agg['after_pct']}% "
           f"(+{agg['gain_pp']}pp)")
     return 0
