@@ -8,7 +8,7 @@ import puppeteer from "puppeteer-core";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LAB = resolve(HERE, "..");
-const PROJECT_PATH = "long-horizon-prompting";
+const PROJECT_PATH = "Agent-Skills-for-Context-Engineering";
 const PORT = 8765;
 
 const CHROME_CANDIDATES = [

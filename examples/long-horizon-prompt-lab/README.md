@@ -13,10 +13,10 @@ produced with the skill's brief-writing workflow, and the scoring uses the rubri
 
 ## Website
 
-This is a **Long-Horizon Prompting** project site, not a homepage for the broader
-Agent Skills for Context Engineering collection. The public site name and Pages path are:
+This is a **Long-Horizon Prompting** project site hosted from this monorepo. The on-page brand
+is Long-Horizon Prompting; GitHub Pages serves it under the repository path:
 
-`https://muratcankoylan.github.io/long-horizon-prompting/`
+`https://muratcankoylan.github.io/Agent-Skills-for-Context-Engineering/`
 
 Pages:
 
@@ -28,27 +28,14 @@ Pages:
 Website prompts expand fully. The screenshot renderer adds a capture-only body class so release
 PNGs remain bounded without changing the site.
 
-### Publish once (dedicated Pages repo)
+### Publish from this repository
 
-GitHub project Pages URLs use the repository name. Do **not** enable Pages on the monorepo
-`Agent-Skills-for-Context-Engineering` for this site, or the public path will stay tied to
-that collection name.
+1. In this monorepo: **Settings → Pages → Build and deployment → Source = GitHub Actions**.
+2. Merge to `main` (or run **Deploy long-horizon prompt lab** via workflow_dispatch).
+3. Open `https://muratcankoylan.github.io/Agent-Skills-for-Context-Engineering/`
 
-1. Create a public empty repository named `long-horizon-prompting` under `muratcankoylan`.
-2. In that repo: **Settings → Pages → Build and deployment → Source = Deploy from a branch**,
-   branch `gh-pages` / `/(root)`. Save after the first deploy creates the branch, or leave
-   Pages unset until the first workflow push lands.
-3. Create a fine-grained PAT (or classic token) with `contents: write` on
-   `muratcankoylan/long-horizon-prompting` only.
-4. In the monorepo: **Settings → Secrets and variables → Actions**, add
-   `LONG_HORIZON_PAGES_TOKEN` with that token.
-5. Merge this work to `main` (or run **Deploy long-horizon prompt lab** via workflow_dispatch).
-   The workflow builds the site here and publishes the static files to
-   `muratcankoylan/long-horizon-prompting` on branch `gh-pages`.
-
-Live URL after the first successful deploy:
-
-`https://muratcankoylan.github.io/long-horizon-prompting/`
+Deployment is defined in `.github/workflows/deploy-prompt-lab.yml`. The deploy job runs only on
+`main`.
 
 
 ## What is here

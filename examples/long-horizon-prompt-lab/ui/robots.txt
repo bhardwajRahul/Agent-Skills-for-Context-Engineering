@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://muratcankoylan.github.io/long-horizon-prompting/sitemap.xml
+Sitemap: https://muratcankoylan.github.io/Agent-Skills-for-Context-Engineering/sitemap.xml

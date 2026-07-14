@@ -23,7 +23,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: long-horizon-prompting-pages
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
@@ -68,47 +68,25 @@ jobs:
           touch _site/.nojekyll
 
       - name: Upload site artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
-          name: long-horizon-prompting-site
           path: _site
-          if-no-files-found: error
 
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: build
     permissions:
-      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Check pages publish token
-        id: pages_token
-        env:
-          LONG_HORIZON_PAGES_TOKEN: ${{ secrets.LONG_HORIZON_PAGES_TOKEN }}
-        run: |
-          if [ -z "${LONG_HORIZON_PAGES_TOKEN}" ]; then
-            echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "LONG_HORIZON_PAGES_TOKEN is not set."
-            echo "Skipping publish. Create muratcankoylan/long-horizon-prompting and add the secret to enable deploys."
-          else
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
-      - name: Download site artifact
-        if: steps.pages_token.outputs.present == 'true'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
-        with:
-          name: long-horizon-prompting-site
-          path: _site
-
-      - name: Publish to long-horizon-prompting Pages repo
-        if: steps.pages_token.outputs.present == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
-        with:
-          personal_token: ${{ secrets.LONG_HORIZON_PAGES_TOKEN }}
-          external_repository: muratcankoylan/long-horizon-prompting
-          publish_branch: gh-pages
-          publish_dir: _site
-          force_orphan: true
-          commit_message: Deploy Long-Horizon Prompting site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

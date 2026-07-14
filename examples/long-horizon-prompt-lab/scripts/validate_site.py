@@ -76,7 +76,7 @@ def local_target(page: Path, value: str) -> Path | None:
     clean = value.split("#", 1)[0].split("?", 1)[0]
     if not clean:
         return None
-    project_prefix = "/long-horizon-prompting/"
+    project_prefix = "/Agent-Skills-for-Context-Engineering/"
     if clean.startswith(project_prefix):
         suffix = clean[len(project_prefix):] or "index.html"
         return (UI / suffix).resolve()
@@ -114,7 +114,7 @@ def validate() -> list[str]:
                     errors.append(f"{filename}: missing metadata {key}")
             canonical = [
                 href for href in doc.assets
-                if "muratcankoylan.github.io/long-horizon-prompting" in href
+                if "muratcankoylan.github.io/Agent-Skills-for-Context-Engineering" in href
             ]
             if not canonical:
                 errors.append(f"{filename}: missing project-path canonical URL")
@@ -130,7 +130,7 @@ def validate() -> list[str]:
             if clean in REQUIRED_NAV:
                 nav_targets.add(clean)
                 continue
-            project_prefix = "/long-horizon-prompting/"
+            project_prefix = "/Agent-Skills-for-Context-Engineering/"
             if clean.startswith(project_prefix):
                 basename = "index.html" if clean == project_prefix else Path(clean).name
                 if basename in REQUIRED_NAV:
@@ -141,7 +141,7 @@ def validate() -> list[str]:
                 normalized_path = parsed_link.path.rstrip("/")
                 basename = (
                     "index.html"
-                    if normalized_path.endswith("/long-horizon-prompting")
+                    if normalized_path.endswith("/Agent-Skills-for-Context-Engineering")
                     else Path(normalized_path).name
                 )
                 if basename in REQUIRED_NAV:
@@ -175,7 +175,7 @@ def validate() -> list[str]:
         locations = {node.text for node in root.findall("s:url/s:loc", ns)}
         for page in PRIMARY_PAGES:
             suffix = "" if page == "index.html" else page
-            expected = f"https://muratcankoylan.github.io/long-horizon-prompting/{suffix}"
+            expected = f"https://muratcankoylan.github.io/Agent-Skills-for-Context-Engineering/{suffix}"
             if expected not in locations:
                 errors.append(f"sitemap.xml: missing {expected}")
     except (ET.ParseError, OSError) as exc:
