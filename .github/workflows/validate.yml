@@ -41,10 +41,25 @@ jobs:
             researcher/scripts/loop_discover.py \
             researcher/scripts/loop_step.py \
             researcher/scripts/loop_daily.py \
-            researcher/scripts/loop_status.py
+            researcher/scripts/loop_status.py \
+            examples/long-horizon-prompt-lab/scripts/build_lab.py \
+            examples/long-horizon-prompt-lab/scripts/validate_site.py
 
       - name: Unit tests (frontmatter parser)
         run: python -m unittest researcher.scripts.tests.test_skill_frontmatter
+
+      - name: Build and validate long-horizon prompting site
+        run: |
+          python examples/long-horizon-prompt-lab/scripts/build_lab.py
+          python examples/long-horizon-prompt-lab/scripts/validate_site.py
+          git diff --exit-code -- \
+            examples/long-horizon-prompt-lab/data/prompt-pairs.json \
+            examples/long-horizon-prompt-lab/ui/data.js \
+            examples/long-horizon-prompt-lab/ui/prompts/
+          test -z "$(git status --porcelain --untracked-files=all -- \
+            examples/long-horizon-prompt-lab/data/prompt-pairs.json \
+            examples/long-horizon-prompt-lab/ui/data.js \
+            examples/long-horizon-prompt-lab/ui/prompts/)"
 
       - name: Platform compatibility (Agent Skills reference)
         run: python researcher/scripts/validate_platform_compat.py --require-reference-validator
